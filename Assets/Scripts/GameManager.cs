@@ -43,6 +43,20 @@ public class GameManager : MonoBehaviour
     public Text timeText;
     //the text box with the current score vs the quota
     public Text scoreText;
+    //the score box in the menu
+    public Text menuScore;
+    //the score box in the loss screen
+    public Text lossScoreText;
+    //the year box in the loss screen
+    public Text lossYearText;
+    //the score box in the win screen
+    public Text winScoreText;
+    //the year box in the win screen
+    public Text winYearText;
+    //the score box in the endless screen
+    public Text endlessScoreText;
+    //the year box in the endless screen
+    public Text endlessYearText;
     //the button to play at normal speed
     public Button playButton;
     //the button to play at double speed
@@ -94,7 +108,7 @@ public class GameManager : MonoBehaviour
         menuOpened = false;
         fastForwarded = false;
         score = 0;
-            quota = length * 100;
+        quota = length * 100;
         //the game starts at minute 0
         gameTime = 0;
         //the total number of in-game minutes is equal to 364 day * 24 hours/day * 60 minutes/hour
@@ -121,6 +135,7 @@ public class GameManager : MonoBehaviour
     {
         gameWin.gameObject.SetActive(false);
         gameWinEndless.gameObject.SetActive(false);
+        quota = quota * quota;
         currentMinute = 0;
         gameTime = 0;
         currentHour = 0;
@@ -235,19 +250,19 @@ public class GameManager : MonoBehaviour
         if(score >= 1000000000)
         {
             scoreRound /= 1000000000;
-            scoreRound = (float)System.Math.Round(scoreRound, 3);
+            scoreRound = (float)System.Math.Round(scoreRound, 0);
             scoreString = "Score: " + scoreRound + "b/";
         }
         else if(score >= 1000000)
         {
             scoreRound /= 1000000;
-            scoreRound = (float)System.Math.Round(scoreRound, 3);
+            scoreRound = (float)System.Math.Round(scoreRound, 0);
             scoreString = "Score: " + scoreRound + "m/";
         }
         else if(score >= 1000)
         {
             scoreRound /= 1000;
-            scoreRound = (float)System.Math.Round(scoreRound, 3);
+            scoreRound = (float)System.Math.Round(scoreRound, 0);
             scoreString = "Score: " + scoreRound + "k/";
         }
         else
@@ -258,19 +273,19 @@ public class GameManager : MonoBehaviour
         if (quota >= 1000000000)
         {
             quotaRound /= 1000000000;
-            quotaRound = (float)System.Math.Round(quotaRound, 3);
+            quotaRound = (float)System.Math.Round(quotaRound, 0);
             scoreString += quotaRound + "b";
         }
         else if (quota >= 1000000)
         {
             quotaRound /= 1000000;
-            quotaRound = (float)System.Math.Round(quotaRound, 3);
+            quotaRound = (float)System.Math.Round(quotaRound, 0);
             scoreString += quotaRound + "m";
         }
         else if (quota >= 1000)
         {
             quotaRound /= 1000;
-            quotaRound = (float)System.Math.Round(quotaRound, 3);
+            quotaRound = (float)System.Math.Round(quotaRound, 0);
             scoreString += quotaRound + "k";
         }
         else
@@ -384,6 +399,7 @@ public class GameManager : MonoBehaviour
         {
             menuOpened = true;
             menu.gameObject.SetActive(true);
+            menuScore.text = "Score: " + score + " | Quota: " + quota;
         }
 
     }
@@ -413,8 +429,8 @@ public class GameManager : MonoBehaviour
         {
             gameUI.gameObject.SetActive(false);
             gameLoss.gameObject.SetActive(true);
-            gameLoss.transform.Find("ScoreText").GetComponent<Text>().text = "Score: " + score + " | " + "Quota: " + quota;
-            gameLoss.transform.Find("YearText").GetComponent<Text>().text = "Year: " + currentYear;  
+            lossScoreText.text = "Score: " + score + " | Quota: " + quota;
+            lossYearText.text = "Year: " + currentYear;  
         }
         //if your score is greater than or equal to the quota
         else
@@ -423,15 +439,15 @@ public class GameManager : MonoBehaviour
             if (endless)
             {
                 gameWinEndless.gameObject.SetActive(true);
-                gameWinEndless.transform.Find("ScoreText").GetComponent<Text>().text = "Score: " + score;
-                gameWinEndless.transform.Find("YearText").GetComponent<Text>().text = "Year: " + currentYear;
+                endlessScoreText.text = "Score: " + score;
+                endlessYearText.text = "Year: " + currentYear;
             }
             //You can choose to begin endless or quit
             else
             {
                 gameWin.gameObject.SetActive(true);
-                gameWin.transform.Find("ScoreText").GetComponent<Text>().text = "Score: " + score;
-                gameWin.transform.Find("YearText").GetComponent<Text>().text = "Year: " + currentYear;
+                winScoreText.text = "Score: " + score;
+                winYearText.text = "Year: " + currentYear;
             }
         }
 
