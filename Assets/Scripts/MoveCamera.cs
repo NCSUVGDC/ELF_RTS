@@ -24,6 +24,7 @@ public class MoveCamera : MonoBehaviour
     private Camera theCamera;
     private float halfHeight;
     private float halfWidth;
+    public GameManager manager;
     
         
     private void Start()
@@ -41,35 +42,38 @@ public class MoveCamera : MonoBehaviour
 
     private void Update()
     {
-        if (Input.mousePosition.x > theScreenWidth - Boundary)
+        if (Input.GetKey(KeyCode.LeftShift) && manager.isRunning())
         {
-            //Debug.Log("yeet1");
-            transform.position = transform.position + new Vector3(speed * Time.deltaTime, 0, 0); // move on +X axis
+            Debug.Log("shift down");
+            if (Input.mousePosition.x > theScreenWidth - Boundary)
+            {
+                //Debug.Log("yeet1");
+                transform.position = transform.position + new Vector3(speed * Time.deltaTime, 0, 0); // move on +X axis
+            }
+            if (Input.mousePosition.x < 0 + Boundary)
+            {
+                //Debug.Log("yeet2");
+                transform.position = transform.position - new Vector3(speed * Time.deltaTime, 0, 0); // move on -X axis
+            }
+            if (Input.mousePosition.y > theScreenHeight - Boundary)
+            {
+                //Debug.Log("yeet3");
+                transform.position = transform.position + new Vector3(0, speed * Time.deltaTime, 0); // move on +y axis
+            }
+            if (Input.mousePosition.y < 0 + Boundary)
+            {
+                //Debug.Log("yeet4");
+                transform.position = transform.position - new Vector3(0, speed * Time.deltaTime, 0); // move on -y axis
+            }
+
+            float clampedX = Mathf.Clamp(transform.position.x, minBounds.x + halfWidth, maxBounds.x - halfWidth);
+            float clampedY = Mathf.Clamp(transform.position.y, minBounds.y + halfHeight, maxBounds.y - halfHeight);
+
+            //Debug.Log("Clamped X: " + clampedX + ", Clamped Y: " + clampedY);
+
+
+            transform.position = new Vector3(clampedX, clampedY, transform.position.z);
         }
-        if (Input.mousePosition.x < 0 + Boundary)
-        {
-            //Debug.Log("yeet2");
-            transform.position = transform.position - new Vector3(speed * Time.deltaTime, 0, 0); // move on -X axis
-        }
-        if (Input.mousePosition.y > theScreenHeight - Boundary)
-        {
-            //Debug.Log("yeet3");
-            transform.position = transform.position + new Vector3(0, speed * Time.deltaTime, 0); // move on +y axis
-        }
-        if (Input.mousePosition.y < 0 + Boundary)
-        {
-            //Debug.Log("yeet4");
-            transform.position = transform.position - new Vector3(0,speed * Time.deltaTime, 0); // move on -y axis
-        }
-
-        float clampedX = Mathf.Clamp(transform.position.x, minBounds.x + halfWidth, maxBounds.x - halfWidth);
-        float clampedY = Mathf.Clamp(transform.position.y, minBounds.y + halfHeight, maxBounds.y - halfHeight);
-
-        //Debug.Log("Clamped X: " + clampedX + ", Clamped Y: " + clampedY);
-
-
-        transform.position = new Vector3(clampedX, clampedY, transform.position.z);
-
     }
     /*
     private void OnGUI()

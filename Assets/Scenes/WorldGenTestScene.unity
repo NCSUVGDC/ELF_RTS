@@ -985,6 +985,7 @@ MonoBehaviour:
   Boundary: 50
   speed: 5
   boundBox: {fileID: 1790710665}
+  manager: {fileID: 315529789}
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0

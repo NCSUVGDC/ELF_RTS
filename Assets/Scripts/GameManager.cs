@@ -485,4 +485,24 @@ public class GameManager : MonoBehaviour
         score = 0;
         GameOver();
     }
+    //determines if the game is running and no menus or extra screens are opened
+    public bool isRunning()
+    {
+        return (started && !menuOpened);
+    }
+    //determines if the game is paused
+    public bool isPaused()
+    {
+        return paused;
+    }
+    //determines if the game is in fast-forward
+    public bool isFastForward()
+    {
+        return fastForwarded;
+    }
+    //adds the given amount of points to the score
+    public void addPoints(int points)
+    {
+        score += (float)points;
+    }
 }
