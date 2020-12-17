@@ -41,6 +41,8 @@ public class GameManager : MonoBehaviour
     public Text daysText;
     //the text box with the current in-game time
     public Text timeText;
+    //the text box with the current score vs the quota
+    public Text scoreText;
     //the button to play at normal speed
     public Button playButton;
     //the button to play at double speed
@@ -55,8 +57,24 @@ public class GameManager : MonoBehaviour
     public Canvas menu;
     //the main menu
     public Canvas mainMenu;
+    //the game loss screen
+    public Canvas gameLoss;
+    //the game win screen
+    public Canvas gameWin;
+    //the quota met screen for endless mode
+    public Canvas gameWinEndless;
+    //the map generator object
+    public GameObject generator;
+    //the generated map container
+    public GameObject mapContainer;
     //Whether or not the menu is open
-    public bool menuOpened;
+    private bool menuOpened;
+    //the current score of the game
+    private float score;
+    //the necessary score to hit to win the game
+    private float quota;
+    //whether or not you're playing in endless mode
+    private bool endless;
     // Start is called before the first frame update
     void Start()
     {
@@ -64,6 +82,7 @@ public class GameManager : MonoBehaviour
         started = false;
         paused = false;
         fastForwarded = false;
+        endless = false;
         
     }
     public void GameStart(float length)
@@ -74,6 +93,8 @@ public class GameManager : MonoBehaviour
         paused = false;
         menuOpened = false;
         fastForwarded = false;
+        score = 0;
+            quota = length * 100;
         //the game starts at minute 0
         gameTime = 0;
         //the total number of in-game minutes is equal to 364 day * 24 hours/day * 60 minutes/hour
@@ -92,9 +113,25 @@ public class GameManager : MonoBehaviour
         currentYear = 2020;
         daysLeft = 364;
         UpdateTextLabels();
+        generator.GetComponent<TileMapGenerator>().GameStart();
+        started = true;
         Play();
     }
-
+    public void GameContinue()
+    {
+        gameWin.gameObject.SetActive(false);
+        gameWinEndless.gameObject.SetActive(false);
+        currentMinute = 0;
+        gameTime = 0;
+        currentHour = 0;
+        currentMonth = 11;
+        currentDay = 26;
+        daysLeft = 364;
+        UpdateTextLabels();
+        started = true;
+        endless = true;
+        Play();
+    }
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -110,7 +147,6 @@ public class GameManager : MonoBehaviour
     //updates the time functionality
     public void UpdateTime()
     {
-        
         float timeChange = tickTime;
         //double time progression if fast forward is active
         if (fastForwarded)
@@ -156,6 +192,7 @@ public class GameManager : MonoBehaviour
         string days;
         string suffix;
         string hourString;
+        string scoreString;
         //puts the correct number suffix for the current day of the month.
         if(currentDay == 1)
         {
@@ -192,9 +229,58 @@ public class GameManager : MonoBehaviour
         }
         date = months[currentMonth] + " " + currentDay + suffix + ", " + currentYear;
         days = daysLeft + " Days 'Till Christmas!";
+        float scoreRound = score;
+        float quotaRound = quota;
+        //correctly formats the score number to be displayed
+        if(score >= 1000000000)
+        {
+            scoreRound /= 1000000000;
+            scoreRound = (float)System.Math.Round(scoreRound, 3);
+            scoreString = "Score: " + scoreRound + "b/";
+        }
+        else if(score >= 1000000)
+        {
+            scoreRound /= 1000000;
+            scoreRound = (float)System.Math.Round(scoreRound, 3);
+            scoreString = "Score: " + scoreRound + "m/";
+        }
+        else if(score >= 1000)
+        {
+            scoreRound /= 1000;
+            scoreRound = (float)System.Math.Round(scoreRound, 3);
+            scoreString = "Score: " + scoreRound + "k/";
+        }
+        else
+        {
+            scoreString = "Score: " + scoreRound + "/";
+        }
+        //correctly formats the quota number to be displayed
+        if (quota >= 1000000000)
+        {
+            quotaRound /= 1000000000;
+            quotaRound = (float)System.Math.Round(quotaRound, 3);
+            scoreString += quotaRound + "b";
+        }
+        else if (quota >= 1000000)
+        {
+            quotaRound /= 1000000;
+            quotaRound = (float)System.Math.Round(quotaRound, 3);
+            scoreString += quotaRound + "m";
+        }
+        else if (quota >= 1000)
+        {
+            quotaRound /= 1000;
+            quotaRound = (float)System.Math.Round(quotaRound, 3);
+            scoreString += quotaRound + "k";
+        }
+        else
+        {
+            scoreString += quotaRound;
+        }
         dateText.text = date;
         daysText.text = days;
         timeText.text = hourString;
+        scoreText.text = scoreString;
         
 
     }
@@ -231,95 +317,156 @@ public class GameManager : MonoBehaviour
     //Code run on pause button click. Pauses an unpaused game, or restores a paused game to the play or fast-forward state.
     public void Pause()
     {
-        if (paused)
+        if (started)
         {
-            paused = false;
-            pauseButton.GetComponent<Image>().color = new Color(255, 255, 255);
-            if (fastForwarded)
+            if (paused)
             {
-                fastForwardButton.GetComponent<Image>().color = new Color(170, 170, 230);
+                paused = false;
+                pauseButton.GetComponent<Image>().color = new Color(255, 255, 255);
+                if (fastForwarded)
+                {
+                    fastForwardButton.GetComponent<Image>().color = new Color(70, 70, 130);
+                }
+                else
+                {
+                    playButton.GetComponent<Image>().color = new Color(70, 70, 130);
+                }
             }
             else
             {
-                playButton.GetComponent<Image>().color = new Color(170, 170, 230);
-            }
-        }
-        else
-        {
-            paused = true;
-            playButton.GetComponent<Image>().color = new Color(255, 255, 255);
-            fastForwardButton.GetComponent<Image>().color = new Color(255, 255, 255);
-            pauseButton.GetComponent<Image>().color = new Color(170, 170, 230);
+                paused = true;
+                playButton.GetComponent<Image>().color = new Color(255, 255, 255);
+                fastForwardButton.GetComponent<Image>().color = new Color(255, 255, 255);
+                pauseButton.GetComponent<Image>().color = new Color(70, 70, 130);
 
+            }
         }
     }
     //code run on play button click. plays paused game or cancels fast-forward effect
     public void Play()
     {
-        started = true;
-        fastForwarded = false;
-        paused = false;
-        playButton.GetComponent<Image>().color = new Color(170, 170, 230);
-        pauseButton.GetComponent<Image>().color = new Color(255, 255, 255);
-        pauseButton.GetComponent<Image>().color = new Color(255, 255, 255);
+        if (started)
+        {
+            fastForwarded = false;
+            paused = false;
+            playButton.GetComponent<Image>().color = new Color(70, 70, 130);
+            pauseButton.GetComponent<Image>().color = new Color(255, 255, 255);
+            pauseButton.GetComponent<Image>().color = new Color(255, 255, 255);
+        }
     }
     //code run of fast forward button click. fast forwards paused or normal speed game, or sets fast-forwarded game to normal speed
     public void FastForward()
     {
-        if(paused || !fastForwarded)
+        if (started)
         {
-            paused = false;
-            fastForwarded = true;
-            fastForwardButton.GetComponent<Image>().color = new Color(170, 170, 230);
-            pauseButton.GetComponent<Image>().color = new Color(255, 255, 255);
-            playButton.GetComponent<Image>().color = new Color(255, 255, 255);
+            if (paused || !fastForwarded)
+            {
+                paused = false;
+                fastForwarded = true;
+                fastForwardButton.GetComponent<Image>().color = new Color(70, 70, 130);
+                pauseButton.GetComponent<Image>().color = new Color(255, 255, 255);
+                playButton.GetComponent<Image>().color = new Color(255, 255, 255);
 
-        }
-        else
-        {
-            fastForwarded = false;
-            fastForwardButton.GetComponent<Image>().color = new Color(255, 255, 255);
-            pauseButton.GetComponent<Image>().color = new Color(255, 255, 255);
-            playButton.GetComponent<Image>().color = new Color(170, 170, 230);
+            }
+            else
+            {
+                fastForwarded = false;
+                fastForwardButton.GetComponent<Image>().color = new Color(255, 255, 255);
+                pauseButton.GetComponent<Image>().color = new Color(255, 255, 255);
+                playButton.GetComponent<Image>().color = new Color(70, 70, 130);
+            }
         }
     }
+    //Opens the menu when the menu button is pressed
     public void Menu()
     {
-        menuOpened = true;
-        menu.gameObject.SetActive(true);
+        if (started)
+        {
+            menuOpened = true;
+            menu.gameObject.SetActive(true);
+        }
 
     }
+    //Method to run when the return to game option is chosen from the menu
     public void Resume()
     {
         menuOpened = false;
         menu.gameObject.SetActive(false);
     }
+    //Method to run when the quit choice is chosen from the menu or the game over screen
     public void Quit()
     {
         started = false;
         menu.gameObject.SetActive(false);
         gameUI.gameObject.SetActive(false);
+        gameLoss.gameObject.SetActive(false);
+        gameWin.gameObject.SetActive(false);
+        gameWinEndless.gameObject.SetActive(false);
         mainMenu.gameObject.SetActive(true);
     }
+    //Method to run when the daysLeft counter hits 0
     public void GameOver()
     {
         started = false;
+        //if your score is under the quota you lose
+        if(score < quota)
+        {
+            gameUI.gameObject.SetActive(false);
+            gameLoss.gameObject.SetActive(true);
+            gameLoss.transform.Find("ScoreText").GetComponent<Text>().text = "Score: " + score + " | " + "Quota: " + quota;
+            gameLoss.transform.Find("YearText").GetComponent<Text>().text = "Year: " + currentYear;  
+        }
+        //if your score is greater than or equal to the quota
+        else
+        {
+            //you can choose to continue endless or quit
+            if (endless)
+            {
+                gameWinEndless.gameObject.SetActive(true);
+                gameWinEndless.transform.Find("ScoreText").GetComponent<Text>().text = "Score: " + score;
+                gameWinEndless.transform.Find("YearText").GetComponent<Text>().text = "Year: " + currentYear;
+            }
+            //You can choose to begin endless or quit
+            else
+            {
+                gameWin.gameObject.SetActive(true);
+                gameWin.transform.Find("ScoreText").GetComponent<Text>().text = "Score: " + score;
+                gameWin.transform.Find("YearText").GetComponent<Text>().text = "Year: " + currentYear;
+            }
+        }
+
     }
+    //Method to run when the restart button is selected from the menu or from the game over screen
     public void Restart()
     {
         started = false;
         menuOpened = false;
         menu.gameObject.SetActive(false);
         gameUI.gameObject.SetActive(false);
+        gameLoss.gameObject.SetActive(false);
         gameSelect.gameObject.SetActive(true);
     }
+    //method to run when the play game button is selected on the main menu. 
     public void GamePlay()
     {
         mainMenu.gameObject.SetActive(false);
         gameSelect.gameObject.SetActive(true);
     }
+    //closes the game
     public void GameQuit()
     {
         Application.Quit();
+    }
+    //tests winning functionality
+    public void Win()
+    {
+        score = quota;
+        GameOver();
+    }
+    //tests losing functionality
+    public void Lose()
+    {
+        score = 0;
+        GameOver();
     }
 }
