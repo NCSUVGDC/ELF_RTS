@@ -77,6 +77,8 @@ public class GameManager : MonoBehaviour
     public Canvas gameWin;
     //the quota met screen for endless mode
     public Canvas gameWinEndless;
+    //the story screen that plays on game start
+    public Canvas gameStory;
     //the map generator object
     public GameObject generator;
     //the generated map container
@@ -103,6 +105,7 @@ public class GameManager : MonoBehaviour
     {
         gameSelect.gameObject.SetActive(false);
         gameUI.gameObject.SetActive(true);
+        gameStory.gameObject.SetActive(true);
         started = false;
         paused = false;
         menuOpened = false;
@@ -128,8 +131,7 @@ public class GameManager : MonoBehaviour
         daysLeft = 364;
         UpdateTextLabels();
         generator.GetComponent<TileMapGenerator>().GameStart();
-        started = true;
-        Play();
+        
     }
     public void GameContinue()
     {
@@ -504,5 +506,12 @@ public class GameManager : MonoBehaviour
     public void addPoints(int points)
     {
         score += (float)points;
+    }
+    //method to run when the story window is closed
+    public void StartPlaying()
+    {
+        started = true;
+        Play();
+        gameStory.gameObject.SetActive(false);
     }
 }
