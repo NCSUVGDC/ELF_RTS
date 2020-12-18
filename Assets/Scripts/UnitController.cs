@@ -32,23 +32,31 @@ public class UnitController : MonoBehaviour
     // Update is called once per frame 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0))
         {
-            //print("Hit left-click");
-            leftClickPos = GetMousePosition();
-
-        }
-
-        if (Input.GetMouseButtonUp(0))
-        {
-            Collider2D[] colliderArray = Physics2D.OverlapAreaAll(leftClickPos, GetMousePosition());
-            foreach (Collider2D collide in colliderArray)
+            Debug.Log("BUTTON HIT");
+            //leftClickPos = GetMousePosition();
+            RaycastHit2D hit = Physics2D.Raycast(GetMousePosition(), camGirl.transform.forward, 100);
+            if (hit)
             {
-                Debug.Log(collide);
-                selectedObjects.Add(collide.gameObject);
-               // collide.gameObject.transform.Translate(1, 1, 1);
+                GameObject obj = hit.transform.gameObject;
+                if (!selectedObjects.Contains(obj))
+                {
+                    selectedObjects.Add(obj);
+                }
             }
         }
+
+        //if (Input.GetMouseButtonUp(0))
+        //{
+        //    //Collider2D[] colliderArray = Physics2D.OverlapAreaAll(leftClickPos, GetMousePosition());
+        //    foreach (Collider2D collide in colliderArray)
+        //    {
+        //        Debug.Log(collide);
+        //        selectedObjects.Add(collide.gameObject);
+        //       // collide.gameObject.transform.Translate(1, 1, 1);
+        //    }
+        //}
         if (Input.GetMouseButtonUp(1))
         {
             Debug.Log("hit-right click");

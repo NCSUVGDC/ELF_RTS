@@ -20,7 +20,7 @@ public class UnitMovement : MonoBehaviour
     void Update()
     {
         Vector3 moveDir = (movePosition - transform.position);
-        Debug.Log(moveDir);
+       // Debug.Log(moveDir);
         GetComponent<IMoveVelocity>().SetVelocity(moveDir);
     }
 }
