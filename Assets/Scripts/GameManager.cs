@@ -89,6 +89,37 @@ public class GameManager : MonoBehaviour
     private float quota;
     //whether or not you're playing in endless mode
     private bool endless;
+
+    //instance of the GameManager to return
+    private static GameManager instance;
+
+    /// <summary>
+    /// Static method to get the instance of the GameManager
+    /// Can be called from anywhere with GameManager.Instance();
+    /// </summary>
+    /// <returns>The singleton instance of the GameManager</returns>
+    public static GameManager Instance()
+    {
+        return instance;
+    }
+
+    /// <summary>
+    /// Awake() runs before Start(). 
+    /// It happens after the object has been initialized, but before it has been enabled.
+    /// </summary>
+    private void Awake()
+    {
+        //Before enabling the object, we need to make sure that there are no other GameManagers.
+        if (instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            instance = this;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
