@@ -3947,9 +3947,9 @@ MonoBehaviour:
   - {fileID: 3363931527302157618, guid: f5c86e65574692f49aaac1dedbd56ffd, type: 3}
   - {fileID: 4065473830177325408, guid: 815b2e7d73817614e93c422310b1829c, type: 3}
   container: {fileID: 1790710663}
-  rows: 50
-  cols: 50
-  numberOfSeeds: 50
+  rows: 100
+  cols: 100
+  numberOfSeeds: 100
 --- !u!1 &1827469485
 GameObject:
   m_ObjectHideFlags: 0
