@@ -461,8 +461,9 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         started = false;
+        menu.gameObject.SetActive(false);
         //if your score is under the quota you lose
-        if(score < quota)
+        if (score < quota)
         {
             gameUI.gameObject.SetActive(false);
             gameLoss.gameObject.SetActive(true);
