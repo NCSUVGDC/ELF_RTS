@@ -23,6 +23,16 @@ public class MoveWithTransforms : MonoBehaviour, IMoveVelocity
     private void Update()
     {
         //Debug.Log(velocityVector);
+        if (GameManager.Instance().isPaused())
+        {
+            Time.timeScale = 0f;
+        } else if (GameManager.Instance().isFastForward())
+        {
+            Time.timeScale = 2f;
+        } else
+        {
+            Time.timeScale = 1f;
+        }
         transform.position += velocityVector * moveSpeed * Time.deltaTime;
 
     }
