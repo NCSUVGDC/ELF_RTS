@@ -25,7 +25,6 @@ public class UnitController : MonoBehaviour
     {
         selectedObjects = new List<GameObject>();
         camGirl = Camera.main;
-        print("hello");
     }
 
 
@@ -34,13 +33,12 @@ public class UnitController : MonoBehaviour
     {
         if (Input.GetMouseButton(0))
         {
-            Debug.Log("BUTTON HIT");
             //leftClickPos = GetMousePosition();
             RaycastHit2D hit = Physics2D.Raycast(GetMousePosition(), camGirl.transform.forward, 100);
             if (hit)
             {
                 GameObject obj = hit.transform.gameObject;
-                if (!selectedObjects.Contains(obj))
+                if (!selectedObjects.Contains(obj) && obj.tag == "Unit")
                 {
                     selectedObjects.Add(obj);
                 }
@@ -59,13 +57,10 @@ public class UnitController : MonoBehaviour
         //}
         if (Input.GetMouseButtonUp(1))
         {
-            Debug.Log("hit-right click");
             foreach(GameObject obj in selectedObjects)
             {
-                Debug.Log("move object");
                // NavMeshAgent agent = obj.GetComponent(typeof(NavMeshAgent)) as NavMeshAgent;
                 
-               Debug.Log("this should do something");
                     //agent.Warp(obj.transform.position);
                     //agent.SetDestination(GetMousePosition());
                UnitMovement uM = obj.GetComponent(typeof(UnitMovement)) as UnitMovement;
