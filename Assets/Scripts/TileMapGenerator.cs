@@ -53,7 +53,7 @@ public class TileMapGenerator : MonoBehaviour
     {
         for (int i = 0; i < numberOfSeeds; i++)
         {
-            Vector3 randomPosition = new Vector3(Random.Range(0, rows), Random.Range(0, cols), 0);
+            Vector3 randomPosition = new Vector3(Random.Range(0, rows), Random.Range(0, cols), -1);
             seeds.Add(randomPosition);
 
             int RandomTileNumber = Random.Range(0, tilePrefabs.Length);
