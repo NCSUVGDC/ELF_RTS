@@ -83,6 +83,8 @@ public class GameManager : MonoBehaviour
     public GameObject generator;
     //the generated map container
     public GameObject mapContainer;
+    //reference to the audio clip
+    public AudioSource music;
     //Whether or not the menu is open
     private bool menuOpened;
     //the current score of the game
@@ -142,7 +144,7 @@ public class GameManager : MonoBehaviour
         menuOpened = false;
         fastForwarded = false;
         score = 0;
-        quota = length * 100;
+        quota = length * 10;
         //the game starts at minute 0
         gameTime = 0;
         //the total number of in-game minutes is equal to 364 day * 24 hours/day * 60 minutes/hour
@@ -400,6 +402,7 @@ public class GameManager : MonoBehaviour
             playButton.GetComponent<Image>().color = new Color(70, 70, 130);
             pauseButton.GetComponent<Image>().color = new Color(255, 255, 255);
             pauseButton.GetComponent<Image>().color = new Color(255, 255, 255);
+            music.pitch = 1;
         }
     }
     //code run of fast forward button click. fast forwards paused or normal speed game, or sets fast-forwarded game to normal speed
@@ -414,7 +417,7 @@ public class GameManager : MonoBehaviour
                 fastForwardButton.GetComponent<Image>().color = new Color(70, 70, 130);
                 pauseButton.GetComponent<Image>().color = new Color(255, 255, 255);
                 playButton.GetComponent<Image>().color = new Color(255, 255, 255);
-
+                music.pitch = 2;
             }
             else
             {
@@ -422,6 +425,7 @@ public class GameManager : MonoBehaviour
                 fastForwardButton.GetComponent<Image>().color = new Color(255, 255, 255);
                 pauseButton.GetComponent<Image>().color = new Color(255, 255, 255);
                 playButton.GetComponent<Image>().color = new Color(70, 70, 130);
+                music.pitch = 1;
             }
         }
     }
