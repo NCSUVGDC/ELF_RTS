@@ -35,5 +35,14 @@ public class Resource : MonoBehaviour
             onQuantityChange.Invoke();
         }
     }
+
+    public void GiveResource (int amount)
+    {
+        quantity += amount;
+        if (onQuantityChange != null)
+        {
+            onQuantityChange.Invoke();
+        }
+    }
    
 }
