@@ -12,6 +12,8 @@ public class TileMapGenerator : MonoBehaviour
     public GameObject[] tilePrefabs;
     public GameObject container;
 
+    public GameObject workshopPrefab;
+
     public int rows;
     public int cols;
 
@@ -34,15 +36,23 @@ public class TileMapGenerator : MonoBehaviour
         {
             for(int j = 0; j < cols; j++)
             {
-
                 Vector3 point = new Vector3(i, j, 0);
-                if (!seeds.Contains(point))
+                if (i == rows / 2 && j == cols / 2)
                 {
-                    int closestPointIndex = FindClosestPoint(point);
+                    GameObject workshop = Instantiate(workshopPrefab, point, Quaternion.identity);
+                    workshop.transform.parent = container.transform;
+                } else
+                {
+                    
+                    if (!seeds.Contains(point))
+                    {
+                        int closestPointIndex = FindClosestPoint(point);
 
-                    GameObject tile = Instantiate(tilePrefabs[tilePrefabIndex[closestPointIndex]], point, Quaternion.identity);
-                    tile.transform.parent = container.transform;
+                        GameObject tile = Instantiate(tilePrefabs[tilePrefabIndex[closestPointIndex]], point, Quaternion.identity);
+                        tile.transform.parent = container.transform;
+                    }
                 }
+                
 
                 
             }
@@ -53,14 +63,17 @@ public class TileMapGenerator : MonoBehaviour
     {
         for (int i = 0; i < numberOfSeeds; i++)
         {
-            Vector3 randomPosition = new Vector3(Random.Range(0, rows), Random.Range(0, cols), -1);
-            seeds.Add(randomPosition);
+            Vector3 randomPosition = new Vector3(Random.Range(0, rows), Random.Range(0, cols), 0);
+            if (!(randomPosition.x == rows / 2 && randomPosition.y == cols / 2))
+            {
+                seeds.Add(randomPosition);
 
-            int RandomTileNumber = Random.Range(0, tilePrefabs.Length);
-            tilePrefabIndex.Add(RandomTileNumber);
+                int RandomTileNumber = Random.Range(0, tilePrefabs.Length);
+                tilePrefabIndex.Add(RandomTileNumber);
 
-            GameObject tile = Instantiate(tilePrefabs[RandomTileNumber], randomPosition, Quaternion.identity);
-            tile.transform.parent = container.transform;
+                GameObject tile = Instantiate(tilePrefabs[RandomTileNumber], randomPosition, Quaternion.identity);
+                tile.transform.parent = container.transform;
+            }
         }
     }
 
