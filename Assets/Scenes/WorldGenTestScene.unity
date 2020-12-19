@@ -576,6 +576,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1123714059624066526, guid: 9e0d5941fb1600648b8e6fb2598322cf,
+        type: 3}
+      propertyPath: m_SleepingMode
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9e0d5941fb1600648b8e6fb2598322cf, type: 3}
 --- !u!1 &315529788
@@ -1382,6 +1387,11 @@ PrefabInstance:
     - target: {fileID: 1123714059624066525, guid: 9e0d5941fb1600648b8e6fb2598322cf,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1123714059624066526, guid: 9e0d5941fb1600648b8e6fb2598322cf,
+        type: 3}
+      propertyPath: m_SleepingMode
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -3369,6 +3379,11 @@ PrefabInstance:
     - target: {fileID: 1123714059624066525, guid: 9e0d5941fb1600648b8e6fb2598322cf,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1123714059624066526, guid: 9e0d5941fb1600648b8e6fb2598322cf,
+        type: 3}
+      propertyPath: m_SleepingMode
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

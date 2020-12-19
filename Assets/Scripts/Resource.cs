@@ -43,6 +43,8 @@ public class Resource : MonoBehaviour
         {
             onQuantityChange.Invoke();
         }
+
+        GameManager.Instance().addPoints(amount);
     }
    
 }
