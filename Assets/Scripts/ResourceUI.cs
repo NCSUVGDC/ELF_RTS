@@ -11,11 +11,13 @@ public class ResourceUI : MonoBehaviour
 
     void OnMouseEnter()
     {
+        Debug.Log("MouseEntered");
         popUp.SetActive(true);
     }
 
     void OnMouseExit()
     {
+        Debug.Log("MouseExited");
         popUp.SetActive(false);
     }
 

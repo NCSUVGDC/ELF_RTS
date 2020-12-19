@@ -76,7 +76,7 @@ public class UnitController : MonoBehaviour
         Vector2 screenPosition = Input.mousePosition;
 
         Vector3 worldPosition = camGirl.ScreenToWorldPoint(screenPosition);
-        worldPosition.z = 0f;
+        worldPosition.z = -2f;
 
         return worldPosition;
 
